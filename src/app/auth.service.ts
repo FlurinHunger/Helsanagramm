@@ -9,11 +9,7 @@ import { Firestore, doc, setDoc, getDoc, updateDoc } from '@angular/fire/firesto
 export class AuthService {
   private auth = getAuth()
   
-  constructor(public routerModule: RouterModule, private router: Router, private firestore: Firestore) {
-    if (localStorage.getItem("uid")) {
-      this.router.navigate([""]);
-    }
-  }
+  constructor(public routerModule: RouterModule, private router: Router, private firestore: Firestore) {}
 
   createAccount(email: string, password: string, username: string) {
     createUserWithEmailAndPassword(this.auth, email, password).then(user => {
@@ -41,6 +37,7 @@ export class AuthService {
     this.auth.signOut();
     this.router.navigate(['/login']);
   }
+  
 
   validateSession() {
     if(localStorage.getItem("uid") == null) {

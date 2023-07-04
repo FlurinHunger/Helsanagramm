@@ -15,6 +15,7 @@ import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { provideRemoteConfig,getRemoteConfig } from '@angular/fire/remote-config';
 import { FormsModule } from '@angular/forms';
+import { ProfilepageComponent } from './profilepage/profilepage.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { FormsModule } from '@angular/forms';
     MainComponent,
     LoginComponent,
     SignupComponent,
-    CreatepostComponent
+    CreatepostComponent,
+    ProfilepageComponent
   ],
   imports: [
     BrowserModule,

@@ -19,7 +19,6 @@ export class MainComponent {
       posts.forEach(post => {
         this.posts = []
         if(post.exists()){
-          console.log(post.data()["post"])
           const date = new Date(post.data()["timestamp"].seconds*1000)
           this.getLikes(post.id).then(likes => {
             this.posts.push({id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})

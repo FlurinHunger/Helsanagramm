@@ -11,7 +11,11 @@ export class LoginComponent {
   email = ""
   password = ""
 
-  constructor(private authService: AuthService, public routerModule: RouterModule, public router: Router) {}
+  constructor(private authService: AuthService, public routerModule: RouterModule, public router: Router) {
+    if (localStorage.getItem("uid")) {
+      this.router.navigate([""]);
+    }
+  }
   
   onLogin() {
     this.authService.login(this.email, this.password);
