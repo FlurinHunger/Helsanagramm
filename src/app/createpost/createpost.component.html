@@ -1,0 +1,9 @@
+<div class="tweet-box">
+    <textarea rows="3" placeholder="What's happening?" [(ngModel)]="postBody" name="postBody"></textarea>
+    <div class="tweet-footer">
+      <div class="tweet-actions">
+        <i class="fas fa-image"></i>
+      </div>
+      <button (click)="createPost()">Post</button>
+    </div>
+</div>

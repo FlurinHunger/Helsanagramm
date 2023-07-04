@@ -1,0 +1,21 @@
+<div class="vh-100 d-flex">
+    <div class="card mx-auto my-auto" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Login</h5>
+            <form (submit)="onLogin()">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" [(ngModel)]="email" name="email" placeholder="Enter email" requierd>
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group mb-2">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" [(ngModel)]="password" name="password" placeholder="Password" requierd>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <br>
+                <small id="emailHelp" class="form-text text-muted">Don't have an Account? <a [routerLink]="['/signup']">Sign Up</a></small>
+              </form>
+        </div>
+    </div>
+</div>
