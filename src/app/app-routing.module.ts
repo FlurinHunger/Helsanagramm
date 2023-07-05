@@ -24,7 +24,7 @@ const routes: Routes = [
     component: CreatepostComponent
   },
   {
-    path: "profilepage",
+    path: "p/:uid",
     component: ProfilepageComponent
   }
 ];

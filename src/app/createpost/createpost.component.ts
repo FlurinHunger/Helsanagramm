@@ -17,7 +17,6 @@ export class CreatepostComponent {
   
 
   constructor(public routerModule: RouterModule, private router: Router, private firestore: Firestore) {
-    console.log(this.auth.currentUser?.uid)
   }
   async createPost() {
       await this.getUsername().then(username => {
