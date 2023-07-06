@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-light justify-content-between mb-3 sticky-top">
+<nav class="navbar navbar-light bg-light justify-content-between mb-3 sticky-top" style="cursor: pointer;">
      <a class="navbar-brand ms-2"><img src="../assets/logo.png" class="img-fluid m-0" style="max-width: 70px;"> Helsanagram</a>
   <form class="form-inline">
         <button class="btn btn-outline-danger my-2 my-sm-0 me-2" (click)="onLogout()" [routerLink]="['/login']">Logout</button>
@@ -13,7 +13,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-start align-items-start">
             <div class="ms-3 w-100">
-                <h5 class="card-title mb-3">{{post.username}}</h5>
+                <h5 class="card-title mb-3"><a (click)="router.navigate(['/p/', post.id])">{{post.username}}</a></h5>
                 <img *ngIf="" class="card-img-top mb-3" src="path-to-post-image" alt="Post image">
                 <p class="card-text mb-3">{{post.content}}</p>            
                 <div class="text-muted text-end justify-content-between d-flex">

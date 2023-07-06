@@ -1,6 +1,6 @@
-<nav class="navbar navbar-light bg-light justify-content-between mb-3 sticky-top">
+<nav class="navbar navbar-light bg-light justify-content-between mb-3 sticky-top" style="cursor: pointer;">
     
-    <a class="navbar-brand ms-2"><img src="../assets/logo.png" class="img-fluid m-0" style="max-width: 70px;"> Helsanagram</a>
+    <a class="navbar-brand ms-2" (click)="this.router.navigate([''])"><img src="../assets/logo.png" class="img-fluid m-0" style="max-width: 70px;"> Helsanagram</a>
     <form class="form-inline">
         <button class="btn btn-outline-danger my-2 my-sm-0 me-2" (click)="onLogout()" [routerLink]="['/login']">Logout</button>
     </form>
@@ -12,8 +12,8 @@
                 <img class="profile-img mb-3 rounded-circle" src="../assets/logo2.png" alt="Profile image" style="max-width: 100px;">
             </div>
             <div class="ms-3 w-100">
-                <h5 class="card-title mb-1">John Doe</h5>
-                <p class="card-handle mb-1">@johndoe</p>
+                <h5 class="card-title mb-1">{{posts[0].username}}</h5>
+                <p class="card-handle mb-1">@{{posts[0].username}}</p>
                 <p class="card-text text-muted mb-3">Just another tech enthusiast!</p>
                 <p class="card-location text-muted mb-3"><i class="fas fa-map-marker-alt"></i> New York, USA</p>
                 <div class="d-flex justify-content-between align-items-center">

@@ -15,17 +15,6 @@ export class ProfilepageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private firestore: Firestore, private authService: AuthService, public routerModule: RouterModule, public router: Router) {
     this.authService.validateSession();
-    onSnapshot(query(collection(this.firestore, "Posts"), orderBy("timestamp", "desc")), posts => {
-      posts.forEach(post => {
-        this.posts = []
-        if(post.exists()){
-          const date = new Date(post.data()["timestamp"].seconds*1000)
-          this.getLikes(post.id).then(likes => {
-            this.posts.push({id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})
-          })
-        }
-      });
-    })
   }
 
   ngOnInit() {
@@ -33,11 +22,29 @@ export class ProfilepageComponent implements OnInit {
       this.uidProfile = params.get('uid') ?? "uid";
       if (this.uidProfile) {
         this.fetchUserProfile();
+        this.fetchUserPosts();
       } else {
         this.router.navigate([""]); 
       }
     });
   }
+
+  fetchUserPosts() {
+    this.posts = []
+    onSnapshot(query(collection(this.firestore, "Posts"), where("userUid", "==", this.uidProfile), orderBy("timestamp", "desc")), (snapshot) => {
+      snapshot.forEach(post => {
+        if(post.exists()){
+          const date = new Date(post.data()["timestamp"].seconds*1000)
+          this.getLikes(post.id).then(likes => {
+            this.posts.push({id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})
+          })
+        }
+      });
+    }, (error) => {
+      console.log(error);
+    })
+  }
+  
 
   async fetchUserProfile() {
     const userDoc = await getDoc(doc(this.firestore, "Users", this.uidProfile));
@@ -77,6 +84,4 @@ export class ProfilepageComponent implements OnInit {
     })
     return {count: postLikes, liked: liked}
   }
-
-  
 }
