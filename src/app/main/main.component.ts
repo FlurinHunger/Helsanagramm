@@ -11,7 +11,7 @@ import { onSnapshot, getDocs, Firestore, collection, Timestamp, setDoc, getDoc, 
 })
 export class MainComponent {
   uid = localStorage.getItem("uid") ?? "."
-  posts: {id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
+  posts: {uid: string, id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
 
   constructor(private firestore: Firestore, private authService: AuthService, public routerModule: RouterModule, public router: Router) {
     this.authService.validateSession();
@@ -21,7 +21,7 @@ export class MainComponent {
         if(post.exists()){
           const date = new Date(post.data()["timestamp"].seconds*1000)
           this.getLikes(post.id).then(likes => {
-            this.posts.push({id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})
+            this.posts.push({uid: post.data()["userUid"], id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})
           })
         }
       });
@@ -59,7 +59,6 @@ export class MainComponent {
     })
     return {count: postLikes, liked: liked}
   }
-
 
 }
 

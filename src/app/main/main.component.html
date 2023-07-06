@@ -13,7 +13,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-start align-items-start">
             <div class="ms-3 w-100">
-                <h5 class="card-title mb-3"><a (click)="router.navigate(['/p/', post.id])">{{post.username}}</a></h5>
+                <h5 class="card-title mb-3"><a (click)="router.navigate(['/p/', post.uid])" style="cursor: pointer;">{{post.username}}</a></h5>
                 <img *ngIf="" class="card-img-top mb-3" src="path-to-post-image" alt="Post image">
                 <p class="card-text mb-3">{{post.content}}</p>            
                 <div class="text-muted text-end justify-content-between d-flex">

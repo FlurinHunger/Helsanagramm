@@ -11,10 +11,12 @@ import { where, onSnapshot, getDocs, Firestore, collection, Timestamp, setDoc, g
 export class ProfilepageComponent implements OnInit {
   uid = localStorage.getItem("uid") ?? "." // UID of current logged in
   uidProfile: string = ""; // UID of current profile
+  profileUsername: string = "";
   posts: {id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
 
   constructor(private route: ActivatedRoute, private firestore: Firestore, private authService: AuthService, public routerModule: RouterModule, public router: Router) {
     this.authService.validateSession();
+    
   }
 
   ngOnInit() {
@@ -38,6 +40,7 @@ export class ProfilepageComponent implements OnInit {
           this.getLikes(post.id).then(likes => {
             this.posts.push({id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})
           })
+          console.log(this.uidProfile)
         }
       });
     }, (error) => {
@@ -49,6 +52,7 @@ export class ProfilepageComponent implements OnInit {
   async fetchUserProfile() {
     const userDoc = await getDoc(doc(this.firestore, "Users", this.uidProfile));
     if (userDoc.exists()) {
+      this.profileUsername = userDoc.data()['username']
     } else {
       this.router.navigate([""]);
     }
