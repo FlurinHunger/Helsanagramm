@@ -24,7 +24,7 @@ export class ProfilepageComponent implements OnInit {
       this.uidProfile = params.get('uid') ?? "uid";
       if (this.uidProfile) {
         this.fetchUserProfile();
-        this.fetchUserPosts();
+        this.fetchUserLikedPosts();
       } else {
         this.router.navigate([""]); 
       }
@@ -47,6 +47,33 @@ export class ProfilepageComponent implements OnInit {
       console.log(error);
     })
   }
+
+  async fetchUserLikedPosts() {
+    this.posts = []
+
+    const postSnapshot = await getDocs(collection(this.firestore, "Posts"));
+    postSnapshot.forEach(async (post) => {
+        if(post.exists()){
+            const likesSnapshot = await getDocs(collection(this.firestore, "Posts", post.id, "likedBy"));
+            let liked = likesSnapshot.docs.some(doc => doc.id === this.uidProfile);
+            if (liked) {
+                const date = new Date(post.data()['timestamp'].seconds*1000);
+                const likes = await this.getLikes(post.id);
+                this.posts.push({
+                    id: post.id,
+                    content: post.data()['post'],
+                    time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`,
+                    username: post.data()['username'],
+                    likes: likes.count,
+                    isLiked: likes.liked
+                })
+            }
+        }
+    });
+}
+
+  
+  
   
 
   async fetchUserProfile() {
