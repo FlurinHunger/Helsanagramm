@@ -12,6 +12,9 @@ export class ProfilepageComponent implements OnInit {
   uid = localStorage.getItem("uid") ?? "." // UID of current logged in
   uidProfile: string = ""; // UID of current profile
   profileUsername: string = "";
+  displayPosts: string = "createdPosts";
+  isActive: boolean = true
+
   posts: {id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
 
   constructor(private route: ActivatedRoute, private firestore: Firestore, private authService: AuthService, public routerModule: RouterModule, public router: Router) {
@@ -24,7 +27,16 @@ export class ProfilepageComponent implements OnInit {
       this.uidProfile = params.get('uid') ?? "uid";
       if (this.uidProfile) {
         this.fetchUserProfile();
-        this.fetchUserLikedPosts();
+        if(this.displayPosts == "createdPosts") {
+          this.fetchUserPosts();
+        }
+        else if(this.displayPosts == "likedPosts"){
+          this.fetchUserLikedPosts();
+        }
+        else {
+          this.fetchUserPosts();
+        }
+        
       } else {
         this.router.navigate([""]); 
       }
@@ -114,5 +126,17 @@ export class ProfilepageComponent implements OnInit {
       });
     })
     return {count: postLikes, liked: liked}
+  }
+
+  switchToLiked() {
+    this.displayPosts = "likedPosts";
+    this.ngOnInit()
+    this.isActive = false
+  }
+
+  switchToPosts() {
+    this.displayPosts = "createdPosts";
+    this.ngOnInit()
+    this.isActive = true
   }
 }

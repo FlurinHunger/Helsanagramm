@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { onSnapshot, getDocs, Firestore, collection, Timestamp, setDoc, getDoc, doc, deleteDoc, orderBy, query } from '@angular/fire/firestore'
@@ -28,6 +28,9 @@ export class MainComponent {
     })
   }
  
+  ngOnInit() {
+    this.posts = []
+  } 
 
   onLogout() {
     this.authService.logout();
