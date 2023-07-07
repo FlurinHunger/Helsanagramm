@@ -16,6 +16,7 @@ export class AuthService {
       localStorage.setItem("uid", user.user.uid)
       setDoc(doc(this.firestore, 'Users', user.user.uid), {
         "username": username,
+        "darkMode": false,
       }).then(()=>{
         console.log("success")
         this.router.navigate([""]);

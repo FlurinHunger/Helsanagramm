@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { onSnapshot, getDocs, Firestore, collection, Timestamp, setDoc, getDoc, doc, deleteDoc, orderBy, query } from '@angular/fire/firestore'
+import { onSnapshot, updateDoc, getDocs, Firestore, collection, Timestamp, setDoc, getDoc, doc, deleteDoc, orderBy, query } from '@angular/fire/firestore'
 
 
 @Component({
@@ -11,6 +11,7 @@ import { onSnapshot, getDocs, Firestore, collection, Timestamp, setDoc, getDoc, 
 })
 export class MainComponent {
   uid = localStorage.getItem("uid") ?? "."
+  isDarkMode = false
   posts: {uid: string, id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
 
   constructor(private firestore: Firestore, private authService: AuthService, public routerModule: RouterModule, public router: Router) {
@@ -30,6 +31,7 @@ export class MainComponent {
  
   ngOnInit() {
     this.posts = []
+    this.fetchUserDarkMode();
   } 
 
   onLogout() {
@@ -61,6 +63,30 @@ export class MainComponent {
       });
     })
     return {count: postLikes, liked: liked}
+  }
+
+  //Darkmode WIP
+  async fetchUserDarkMode() {
+    const userDoc = await getDoc(doc(this.firestore, "Users", this.uid));
+    if (userDoc.exists() && userDoc.data()['darkMode']) {
+      this.toggleDarkMode();
+    }
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    this.updateUserDarkModeInFirestore(this.isDarkMode);
+  
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }
+  
+  async updateUserDarkModeInFirestore(darkMode: boolean) {
+    const userRef = doc(this.firestore, "Users", this.uid);
+    await updateDoc(userRef, { darkMode: darkMode });
   }
 
 }
