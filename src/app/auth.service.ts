@@ -17,6 +17,8 @@ export class AuthService {
       setDoc(doc(this.firestore, 'Users', user.user.uid), {
         "username": username,
         "darkMode": false,
+        "followers": 0,
+        "following": 0
       }).then(()=>{
         console.log("success")
         this.router.navigate([""]);

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { where, onSnapshot, getDocs, Firestore, collection, Timestamp, setDoc, getDoc, doc, deleteDoc, orderBy, query } from '@angular/fire/firestore'
+import { updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-profilepage',
@@ -14,6 +15,8 @@ export class ProfilepageComponent implements OnInit {
   profileUsername: string = "";
   displayPosts: string = "createdPosts";
   isActive: boolean = true
+  followers: number = 0
+  following: number = 0
 
   posts: {id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
 
@@ -139,4 +142,5 @@ export class ProfilepageComponent implements OnInit {
     this.ngOnInit()
     this.isActive = true
   }
+
 }
