@@ -12,6 +12,7 @@ import { onSnapshot, updateDoc, getDocs, Firestore, collection, Timestamp, setDo
 export class MainComponent {
   uid = localStorage.getItem("uid") ?? "."
   isDarkMode = false
+  isActive = true
   posts: {uid: string, id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
 
   constructor(private firestore: Firestore, private authService: AuthService, public routerModule: RouterModule, public router: Router) {

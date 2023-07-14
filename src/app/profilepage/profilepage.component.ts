@@ -17,6 +17,9 @@ export class ProfilepageComponent implements OnInit {
   isActive: boolean = true
   followers: number = 0
   following: number = 0
+  isFollowing: boolean = false
+
+  followText: string = "Follow"
 
   posts: {id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
 
@@ -30,6 +33,7 @@ export class ProfilepageComponent implements OnInit {
       this.uidProfile = params.get('uid') ?? "uid";
       if (this.uidProfile) {
         this.fetchUserProfile();
+        this.getFollowers()
         if(this.displayPosts == "createdPosts") {
           this.fetchUserPosts();
         }
@@ -95,6 +99,20 @@ export class ProfilepageComponent implements OnInit {
     const userDoc = await getDoc(doc(this.firestore, "Users", this.uidProfile));
     if (userDoc.exists()) {
       this.profileUsername = userDoc.data()['username']
+
+      const followingSnapshot = await getDocs(collection(this.firestore, "Users", this.uidProfile, "followedBy"));
+      const followingList = followingSnapshot.docs.map(doc => doc.id);
+
+      if (followingList.includes(this.uid)) {
+        this.isFollowing = true
+        this.followText = "Unfollow"
+        console.log(this.isFollowing);
+      } else {
+        this.isFollowing = false
+        this.followText = "Follow"
+        console.log(this.isFollowing);
+      }
+
     } else {
       this.router.navigate([""]);
     }
@@ -141,6 +159,38 @@ export class ProfilepageComponent implements OnInit {
     this.displayPosts = "createdPosts";
     this.ngOnInit()
     this.isActive = true
+  }
+
+  followUser() {
+    if (this.isFollowing) {
+      this.isFollowing = false
+      this.followers--
+      this.followText = "Follow"
+      deleteDoc(doc(this.firestore, "Users", this.uidProfile, "followedBy", this.uid))
+      deleteDoc(doc(this.firestore, "Users", this.uid, "following", this.uidProfile))
+    }
+    else {
+      this.isFollowing = true
+      this.followers++
+      this.followText = "Unfollow"
+      setDoc(doc(this.firestore, "Users", this.uidProfile, "followedBy", this.uid), {})
+      setDoc(doc(this.firestore, "Users", this.uid, "following", this.uidProfile), {})
+    }
+  }
+
+  async getFollowers() {
+    let followers: number = 0
+    let following: number = 0
+    await getDocs(collection(this.firestore, "Users", this.uidProfile, "followedBy")).then(followed => {
+      followed.forEach(follow => {
+        this.followers++
+      });
+    })
+    await getDocs(collection(this.firestore, "Users", this.uidProfile, "following")).then(followed => {
+      followed.forEach(follow => {
+        this.following++
+      });
+    })
   }
 
 }

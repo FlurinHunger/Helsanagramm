@@ -21,7 +21,7 @@
                         <p class="m-0"><strong>{{this.following}}</strong> Following</p>
                         <p class="m-0"><strong>{{this.followers}}</strong> Followers</p>
                     </div>
-                    <button class="btn btn-primary">Follow</button>
+                    <button class="btn btn-outline-danger followButton" (click)="this.followUser()" [class.followed]="this.isFollowing">{{followText}}</button>
                 </div>
             </div>
         </div>

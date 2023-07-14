@@ -7,7 +7,16 @@
 
 <app-createpost></app-createpost>
 
-
+<div class="tweet-box mx-auto post-width" style="max-width: 60%;">
+    <div class="card-body">
+        <div class="w-100">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <a [class.active]="this.isActive" style="cursor: pointer; color:black; text-decoration: none;"><strong>For You</strong></a>
+                <a [class.active]="!this.isActive" style="cursor: pointer; color:black; text-decoration: none;"><strong>Following</strong></a>
+            </div>
+        </div>
+    </div>
+</div>
   
 <div *ngFor="let post of posts" class="tweet-box mx-auto mb-3 post-width">
     <div class="card-body">

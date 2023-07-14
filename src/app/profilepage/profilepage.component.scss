@@ -28,6 +28,34 @@
   }
   
   .active {
-    color: #d63384 !important;
+    color: #1da1f2 !important;
     text-decoration: none;
   }
+  
+.followButton {
+  padding: 10px 20px;
+  background-color: #1da1f2;
+  border: none;
+  border-radius: 30px;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    background-color: transparent;
+    color: #1da1f2;
+  }
+}
+
+.followed {
+  padding: 10px 20px;
+  background-color: #DC3545;
+  border: none;
+  border-radius: 30px;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    background-color: transparent;
+    color: #DC3545;
+  }
+}
