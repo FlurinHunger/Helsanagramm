@@ -12,27 +12,26 @@ import { onSnapshot, updateDoc, getDocs, Firestore, collection, Timestamp, setDo
 export class MainComponent {
   uid = localStorage.getItem("uid") ?? "."
   isDarkMode = false
-  isActive = true
+  isActive = false
+  displayPosts: string = "following";
   posts: {uid: string, id: string, content: string, time: string, username: string, likes: number, isLiked: boolean}[] = []
+  following: {uid: string}[] = []
 
   constructor(private firestore: Firestore, private authService: AuthService, public routerModule: RouterModule, public router: Router) {
     this.authService.validateSession();
-    onSnapshot(query(collection(this.firestore, "Posts"), orderBy("timestamp", "desc")), posts => {
-      posts.forEach(post => {
-        this.posts = []
-        if(post.exists()){
-          const date = new Date(post.data()["timestamp"].seconds*1000)
-          this.getLikes(post.id).then(likes => {
-            this.posts.push({uid: post.data()["userUid"], id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})
-          })
-        }
-      });
-    })
   }
  
   ngOnInit() {
-    this.posts = []
     this.fetchUserDarkMode();
+    if(this.displayPosts == "forYou") {
+      this.fetchForYouPosts();
+    }
+    else if(this.displayPosts == "following"){
+      this.fetchFollowingPosts();
+    }
+    else {
+      this.fetchForYouPosts();
+    }
   } 
 
   onLogout() {
@@ -90,6 +89,62 @@ export class MainComponent {
     await updateDoc(userRef, { darkMode: darkMode });
   }
 
+
+
+  switchToFollowing() {
+    this.displayPosts = "following";
+    this.ngOnInit()
+    this.isActive = false
+  }
+  
+  switchToForYou() {
+    this.displayPosts = "forYou";
+    this.ngOnInit()
+    this.isActive = true
+  }
+  
+  fetchForYouPosts() {
+    this.posts = []
+    onSnapshot(query(collection(this.firestore, "Posts"), orderBy("timestamp", "desc")), posts => {
+      posts.forEach(post => {
+        if(post.exists()){
+          const date = new Date(post.data()["timestamp"].seconds*1000)
+          this.getLikes(post.id).then(likes => {
+            this.posts.push({uid: post.data()["userUid"], id: post.id, content: post.data()["post"], time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`, username: post.data()["username"], likes: likes.count, isLiked: likes.liked})
+          })
+        }
+      });
+    })
+  }
+
+
+      
+  async fetchFollowingPosts() {
+    this.posts = []
+
+    const followingSnapshot = await getDocs(collection(this.firestore, "Users", this.uid, "following"));
+    const followingList = followingSnapshot.docs.map(doc => doc.id);
+
+    const postSnapshot = await getDocs(collection(this.firestore, "Posts"));
+    postSnapshot.forEach(async (post) => {
+      if(post.exists()){
+        
+        if(followingList.includes(post.data()['userUid'])) {
+          const date = new Date(post.data()['timestamp'].seconds*1000);
+          const likes = await this.getLikes(post.id);
+          this.posts.push({
+              uid: post.data()['userUid'],
+              id: post.id,
+              content: post.data()['post'],
+              time: `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`,
+              username: post.data()['username'],
+              likes: likes.count,
+              isLiked: likes.liked
+          })
+        }
+
+      }
+    });
+  }
+
 }
-
-

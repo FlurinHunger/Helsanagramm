@@ -11,8 +11,8 @@
     <div class="card-body">
         <div class="w-100">
             <div class="d-flex justify-content-between align-items-center w-100">
-                <a [class.active]="this.isActive" style="cursor: pointer; color:black; text-decoration: none;"><strong>For You</strong></a>
-                <a [class.active]="!this.isActive" style="cursor: pointer; color:black; text-decoration: none;"><strong>Following</strong></a>
+                <a [class.active]="this.isActive" style="cursor: pointer; color:black; text-decoration: none;" (click)="switchToForYou()"><strong>For You</strong></a>
+                <a [class.active]="!this.isActive" style="cursor: pointer; color:black; text-decoration: none;" (click)="switchToFollowing()"><strong>Following</strong></a>
             </div>
         </div>
     </div>

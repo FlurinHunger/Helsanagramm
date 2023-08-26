@@ -69,7 +69,6 @@ export class ProfilepageComponent implements OnInit {
 
   async fetchUserLikedPosts() {
     this.posts = []
-
     const postSnapshot = await getDocs(collection(this.firestore, "Posts"));
     postSnapshot.forEach(async (post) => {
         if(post.exists()){
