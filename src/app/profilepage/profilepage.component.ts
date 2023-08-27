@@ -29,6 +29,8 @@ export class ProfilepageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.followers = 0
+    this.following = 0
     this.route.paramMap.subscribe(params => {
       this.uidProfile = params.get('uid') ?? "uid";
       if (this.uidProfile) {
