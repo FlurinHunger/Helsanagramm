@@ -1,11 +1,20 @@
 <nav class="navbar navbar-light bg-light justify-content-between mb-3 sticky-top" style="cursor: pointer;">
      <a class="navbar-brand ms-2"><img src="../assets/logo.png" class="img-fluid m-0" style="max-width: 70px;"> Helsanagram</a>
-  <form class="form-inline">
-        <button class="btn btn-outline-danger my-2 my-sm-0 me-2" (click)="onLogout()" [routerLink]="['/login']">Logout</button>
+     <form class="form-inline">
+        <!-- Toggle button -->
+        <label class="me-2">
+            <input type="checkbox" class="darkToggle" (click)="toggleDarkMode()" [checked]="!isDarkMode"> 
+            <i class="fa-solid fa-sun sun"></i>
+            <i class="fa-solid fa-moon moon"></i>
+            <span class="toggle"></span>
+        </label>
+        <!-- Logout button -->
+        <button class="btn btn-outline-danger my-2 my-sm-0" (click)="onLogout()" [routerLink]="['/login']">Logout</button>
     </form>
 </nav>
 
 <app-createpost></app-createpost>
+
 
 <div class="tweet-box mx-auto post-width" style="max-width: 60%;">
     <div class="card-body">

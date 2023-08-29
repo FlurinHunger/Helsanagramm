@@ -22,7 +22,6 @@ export class MainComponent {
   }
  
   ngOnInit() {
-    this.fetchUserDarkMode();
     if(this.displayPosts == "forYou") {
       this.fetchForYouPosts();
     }
@@ -32,6 +31,7 @@ export class MainComponent {
     else {
       this.fetchForYouPosts();
     }
+    this.fetchUserDarkMode();
   } 
 
   onLogout() {
@@ -69,12 +69,15 @@ export class MainComponent {
   async fetchUserDarkMode() {
     const userDoc = await getDoc(doc(this.firestore, "Users", this.uid));
     if (userDoc.exists() && userDoc.data()['darkMode']) {
-      this.toggleDarkMode();
+      this.isDarkMode = true;
+    } else {
+      this.isDarkMode = false;
     }
   }
 
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
+    console.log(this.isDarkMode)
     this.updateUserDarkModeInFirestore(this.isDarkMode);
   
     if (this.isDarkMode) {
