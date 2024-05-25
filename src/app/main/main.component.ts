@@ -77,7 +77,6 @@ export class MainComponent {
 
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
-    console.log(this.isDarkMode)
     this.updateUserDarkModeInFirestore(this.isDarkMode);
   
     if (this.isDarkMode) {
